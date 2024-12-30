@@ -2,7 +2,7 @@ package com.jahirtrap.tooltips.init;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -114,7 +114,7 @@ public class ModTooltips {
         }
 
         if (ModConfig.showModName) {
-            var modContainer = ModList.get().getModContainerById(Registry.ITEM.getKey(stack.getItem()).getNamespace());
+            var modContainer = ModList.get().getModContainerById(BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace());
             if (modContainer.isPresent()) {
                 Component modNameTooltip = Component.literal(modContainer.get().getModInfo().getDisplayName()).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
                 list.add(modNameTooltip);
