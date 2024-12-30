@@ -4,6 +4,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -104,7 +105,7 @@ public class ModTooltips {
             }
 
             if (ModConfig.showEnchantmentPower && player != null) {
-                float enchantPower = getEnchantPowerBonus(player.getLevel(), block);
+                float enchantPower = getEnchantPowerBonus(player.level(), block);
                 if (enchantPower != 0) {
                     Component enchantPowerTooltip = Component.translatable("tooltipstxf.tooltip.enchantment_power", formatText(enchantPower)).withStyle(ChatFormatting.DARK_GRAY);
                     list.add(enchantPowerTooltip);
@@ -127,6 +128,6 @@ public class ModTooltips {
     }
 
     private static float getEnchantPowerBonus(Level level, Block block) {
-        return block.defaultBlockState().is(Blocks.BOOKSHELF) ? 1 : 0;
+        return block.defaultBlockState().is(BlockTags.ENCHANTMENT_POWER_PROVIDER) ? 1 : 0;
     }
 }

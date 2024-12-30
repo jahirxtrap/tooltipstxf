@@ -105,7 +105,7 @@ public class ModTooltips {
             }
 
             if (ModConfig.showEnchantmentPower && player != null) {
-                float enchantPower = getEnchantPowerBonus(player.getLevel(), block);
+                float enchantPower = getEnchantPowerBonus(player.level(), block);
                 if (enchantPower != 0) {
                     Component enchantPowerTooltip = Component.translatable("tooltipstxf.tooltip.enchantment_power", formatText(enchantPower)).withStyle(ChatFormatting.DARK_GRAY);
                     list.add(enchantPowerTooltip);
