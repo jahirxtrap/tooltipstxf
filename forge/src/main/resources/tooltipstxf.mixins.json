@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.jahirtrap.tooltips.init.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ItemStackMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "tooltipstxf.refmap.json"
+}

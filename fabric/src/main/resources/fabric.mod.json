@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "${mod_id}",
+	"version": "${mod_version}",
+	"name": "${mod_name}",
+	"description": "${mod_description}",
+	"authors": [
+		"${mod_author}"
+	],
+	"contact": {
+		"homepage": "${mod_url}",
+		"issues": "${mod_issues}"
+	},
+	"license": "${mod_license}",
+	"icon": "logo.png",
+	"environment": "${side}",
+	"entrypoints": {
+		"main": [
+			"com.jahirtrap.tooltips.TooltipsMod"
+		]
+	},
+	"mixins": [
+		"${mod_id}.mixins.json"
+	],
+	"depends": {
+		"fabricloader": "${loader_version_range}",
+		"minecraft": "${minecraft_version_range}",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"accessWidener" : "${mod_id}.aw",
+	"jars": [{
+      		"file": "META-INF/jars/configlibtxf-${configlibtxf_version}-fabric.jar"
+    	}]
+}

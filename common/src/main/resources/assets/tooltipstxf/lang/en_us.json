@@ -1,0 +1,15 @@
+{
+  "tooltipstxf.tooltip.nutrition": "Nutrition: %s",
+  "tooltipstxf.tooltip.saturation": "Saturation: %s",
+  "tooltipstxf.tooltip.compostable": "Compostable: %s",
+  "tooltipstxf.tooltip.burn_time": "Burn Time: %s",
+  "tooltipstxf.tooltip.burn_time.seconds": "Burn Time: %ss",
+  "tooltipstxf.tooltip.use_cooldown": "Cooldown: %s",
+  "tooltipstxf.tooltip.use_cooldown.seconds": "Cooldown: %ss",
+  "tooltipstxf.tooltip.enchantability": "Enchantability: %s",
+  "tooltipstxf.tooltip.repair_cost": "Repair Cost: %s",
+  "tooltipstxf.tooltip.hardness": "Hardness: %s",
+  "tooltipstxf.tooltip.resistance": "Resistance: %s",
+  "tooltipstxf.tooltip.enchantment_power": "Enchantment Power: %s",
+  "tooltipstxf.config.title": "Tooltips TXF"
+}
