@@ -13,7 +13,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.ModList;
 
 import java.util.List;
@@ -52,8 +51,8 @@ public class ModTooltips {
             }
         }
 
-        if (ModConfig.showBurnTime) {
-            int burnTime = ForgeHooks.getBurnTime(stack, null);
+        if (ModConfig.showBurnTime && player != null) {
+            int burnTime = player.level().fuelValues().burnDuration(stack);
             if (burnTime != 0) {
                 Component burnTimeTooltip;
                 if (ModConfig.timeInSeconds)
@@ -64,22 +63,22 @@ public class ModTooltips {
             }
         }
 
-        if (ModConfig.showUseCooldown && player != null) {
-            var cooldown = player.getCooldowns().cooldowns.get(stack.getItem());
-            if (cooldown != null) {
+        if (ModConfig.showUseCooldown) {
+            var cooldown = stack.get(DataComponents.USE_COOLDOWN);
+            if (cooldown != null && cooldown.seconds() != 0) {
                 Component cooldownComponent;
                 if (ModConfig.timeInSeconds)
-                    cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown.seconds", formatText((cooldown.endTime - cooldown.startTime) / 20f));
+                    cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown.seconds", formatText(cooldown.seconds()));
                 else
-                    cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown", cooldown.endTime - cooldown.startTime);
+                    cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown", cooldown.ticks());
                 list.add(cooldownComponent.copy().withStyle(ChatFormatting.DARK_GRAY));
             }
         }
 
         if (ModConfig.showEnchantability) {
-            int enchantable = stack.getItem().getEnchantmentValue();
-            if (enchantable != 0) {
-                Component enchantabilityComponent = Component.translatable("tooltipstxf.tooltip.enchantability", enchantable).withStyle(ChatFormatting.DARK_GRAY);
+            var enchantable = stack.get(DataComponents.ENCHANTABLE);
+            if (enchantable != null && enchantable.value() != 0) {
+                Component enchantabilityComponent = Component.translatable("tooltipstxf.tooltip.enchantability", enchantable.value()).withStyle(ChatFormatting.DARK_GRAY);
                 list.add(enchantabilityComponent);
             }
         }

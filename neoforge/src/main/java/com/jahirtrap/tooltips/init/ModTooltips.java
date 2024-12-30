@@ -51,9 +51,9 @@ public class ModTooltips {
             }
         }
 
-        if (ModConfig.showBurnTime) {
+        if (ModConfig.showBurnTime && player != null) {
             try {
-                int burnTime = stack.getBurnTime(null);
+                int burnTime = stack.getBurnTime(null, player.level().fuelValues());
                 if (burnTime > -1 && burnTime != 0) {
                     Component burnTimeTooltip;
                     if (ModConfig.timeInSeconds)
@@ -66,22 +66,22 @@ public class ModTooltips {
             }
         }
 
-        if (ModConfig.showUseCooldown && player != null) {
-            var cooldown = player.getCooldowns().cooldowns.get(stack.getItem());
-            if (cooldown != null) {
+        if (ModConfig.showUseCooldown) {
+            var cooldown = stack.get(DataComponents.USE_COOLDOWN);
+            if (cooldown != null && cooldown.seconds() != 0) {
                 Component cooldownComponent;
                 if (ModConfig.timeInSeconds)
-                    cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown.seconds", formatText((cooldown.endTime - cooldown.startTime) / 20f));
+                    cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown.seconds", formatText(cooldown.seconds()));
                 else
-                    cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown", cooldown.endTime - cooldown.startTime);
+                    cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown", cooldown.ticks());
                 list.add(cooldownComponent.copy().withStyle(ChatFormatting.DARK_GRAY));
             }
         }
 
         if (ModConfig.showEnchantability) {
-            int enchantable = stack.getItem().getEnchantmentValue();
-            if (enchantable != 0) {
-                Component enchantabilityComponent = Component.translatable("tooltipstxf.tooltip.enchantability", enchantable).withStyle(ChatFormatting.DARK_GRAY);
+            var enchantable = stack.get(DataComponents.ENCHANTABLE);
+            if (enchantable != null && enchantable.value() != 0) {
+                Component enchantabilityComponent = Component.translatable("tooltipstxf.tooltip.enchantability", enchantable.value()).withStyle(ChatFormatting.DARK_GRAY);
                 list.add(enchantabilityComponent);
             }
         }
