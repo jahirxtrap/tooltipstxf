@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'java-library'
-    id 'net.neoforged.gradle.userdev' version '7.0.82'
+    id 'net.neoforged.gradle.userdev' version '7.0.107'
     id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
@@ -40,10 +40,10 @@ dependencies {
     compileOnly project(":common")
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    jarJar "com.jahirtrap:configlibtxf:[${configlibtxf_version}-neoforge,)"
+    jarJar "com.jahirtrap:configlibtxf:${configlibtxf_version}-neoforge"
 }
 
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def resourceTargets = ['META-INF/neoforge.mods.toml', 'pack.mcmeta']
 def replaceProperties = [
         minecraft_version: minecraft_version, minecraft_version_range: neoforge_minecraft_version_range,
         neoforge_version: neoforge_version, neoforge_version_range: neoforge_version_range,
@@ -59,10 +59,12 @@ processResources {
         expand replaceProperties
     }
     from project(":common").sourceSets.main.resources
-    exclude '**/data/c/**', '**/data/fabric/**'
+    exclude '**/data/fabric/**', '**/data/forge/**'
 }
 
 tasks.jarJar.setArchiveClassifier('')
+tasks.jar.setArchiveClassifier('slim')
+tasks.jarJar.doLast { delete(jar.archiveFile) }
 jar.finalizedBy('jarJar')
 
 publishMods {
@@ -71,7 +73,7 @@ publishMods {
     type = STABLE
     modLoaders.addAll("neoforge")
     changelog = rootProject.file("CHANGELOG.md").text
-    def gameVersions = ["1.20.3", "1.20.4"]
+    def gameVersions = ["1.20.5", "1.20.6"]
 
     curseforge {
         accessToken = System.getenv("CURSEFORGE_TOKEN")

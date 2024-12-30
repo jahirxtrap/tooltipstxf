@@ -2,10 +2,12 @@ package com.jahirtrap.tooltips.init;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -17,7 +19,7 @@ import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import java.util.List;
 
 public class ModTooltips {
-    public static void init(ItemStack stack, Player player, List<Component> list, TooltipFlag flag) {
+    public static void init(ItemStack stack, Player player, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (!ModConfig.enableMod) return;
 
         if (ModConfig.showDurability) {
@@ -28,17 +30,15 @@ public class ModTooltips {
         }
 
         if (ModConfig.showFoodValues) {
-            var foodProperties = stack.getItem().getFoodProperties();
-            if (stack.isEdible()) {
+            var foodProperties = stack.get(DataComponents.FOOD);
+            if (foodProperties != null) {
                 Component foodTooltip = Component.empty();
-                int nutrition = foodProperties.getNutrition();
-                float saturation = nutrition * foodProperties.getSaturationModifier() * 2;
-                if (nutrition != 0 && saturation != 0)
-                    foodTooltip = Component.translatable("tooltipstxf.tooltip.nutrition", nutrition).append(" ").append(Component.translatable("tooltipstxf.tooltip.saturation", formatText(saturation)));
-                else if (nutrition != 0)
-                    foodTooltip = Component.translatable("tooltipstxf.tooltip.nutrition", nutrition);
-                else if (saturation != 0)
-                    foodTooltip = Component.translatable("tooltipstxf.tooltip.saturation", formatText(saturation));
+                if (foodProperties.nutrition() != 0 && foodProperties.saturation() != 0)
+                    foodTooltip = Component.translatable("tooltipstxf.tooltip.nutrition", foodProperties.nutrition()).append(" ").append(Component.translatable("tooltipstxf.tooltip.saturation", formatText(foodProperties.saturation())));
+                else if (foodProperties.nutrition() != 0)
+                    foodTooltip = Component.translatable("tooltipstxf.tooltip.nutrition", foodProperties.nutrition());
+                else if (foodProperties.saturation() != 0)
+                    foodTooltip = Component.translatable("tooltipstxf.tooltip.saturation", formatText(foodProperties.saturation()));
                 if (!foodTooltip.equals(Component.empty()))
                     list.add(foodTooltip.copy().withStyle(ChatFormatting.DARK_GRAY));
             }
@@ -85,7 +85,7 @@ public class ModTooltips {
         }
 
         if (ModConfig.showRepairCost) {
-            int repairCost = stack.getBaseRepairCost();
+            int repairCost = stack.getComponents().getOrDefault(DataComponents.REPAIR_COST, 0);
             if (repairCost != 0)
                 list.add(Component.translatable("tooltipstxf.tooltip.repair_cost", repairCost + 1).withStyle(ChatFormatting.DARK_GRAY));
         }
