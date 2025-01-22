@@ -3,7 +3,7 @@ package com.jahirtrap.tooltips.init.mixin;
 import com.jahirtrap.tooltips.init.ModTooltips;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ import java.util.List;
 public abstract class ItemStackMixin {
 
     @Inject(method = "getTooltipLines", at = @At(value = "RETURN"))
-    private void getTooltipLines(Item.TooltipContext context, Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir) {
+    private void getTooltipLines(TooltipContext context, Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir) {
         ModTooltips.init((ItemStack) (Object) this, player, context, cir.getReturnValue(), flag);
     }
 }
