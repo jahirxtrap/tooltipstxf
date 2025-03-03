@@ -10,6 +10,5 @@
   "tooltipstxf.tooltip.repair_cost": "Repair Cost: %s",
   "tooltipstxf.tooltip.hardness": "Hardness: %s",
   "tooltipstxf.tooltip.resistance": "Resistance: %s",
-  "tooltipstxf.tooltip.enchantment_power": "Enchantment Power: %s",
-  "tooltipstxf.config.title": "Tooltips TXF"
+  "tooltipstxf.tooltip.enchantment_power": "Enchantment Power: %s"
 }
