@@ -1,1 +1,1 @@
-- First release
+- Updated config lib

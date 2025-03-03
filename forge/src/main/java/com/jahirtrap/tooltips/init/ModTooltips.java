@@ -116,11 +116,9 @@ public class ModTooltips {
         }
 
         if (ModConfig.showModName) {
-            var modContainer = ModList.get().getModContainerById(Registry.ITEM.getKey(stack.getItem()).getNamespace());
-            if (modContainer.isPresent()) {
-                Component modNameTooltip = new TextComponent(modContainer.get().getModInfo().getDisplayName()).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
-                list.add(modNameTooltip);
-            }
+            String modId = Registry.ITEM.getKey(stack.getItem()).getNamespace();
+            Component modNameTooltip = new TextComponent(ModList.get().getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId)).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
+            list.add(modNameTooltip);
         }
     }
 
