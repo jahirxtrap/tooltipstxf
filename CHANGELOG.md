@@ -1,1 +1,2 @@
+- Added tooltip color config options
 - Updated config lib
