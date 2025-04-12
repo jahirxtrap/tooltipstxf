@@ -1,1 +1,2 @@
-- Update to 1.21.5
+- Added tooltip color config options
+- Updated config lib
