@@ -23,7 +23,7 @@ public class ModTooltips {
         if (ModConfig.showDurability) {
             if ((!flag.isAdvanced() || (flag.isAdvanced() && !stack.isDamaged())) && stack.getMaxDamage() != 0) {
                 Component durabilityTooltip = Component.translatable("item.durability", stack.getMaxDamage() - stack.getDamageValue(), stack.getMaxDamage());
-                list.add(durabilityTooltip.copy().withStyle(ChatFormatting.DARK_GRAY));
+                list.add(durabilityTooltip.copy().withStyle(s -> s.withColor(getColor(0x555555, ModConfig.durabilityColor))));
             }
         }
 
@@ -40,14 +40,14 @@ public class ModTooltips {
                 else if (saturation != 0)
                     foodTooltip = Component.translatable("tooltipstxf.tooltip.saturation", formatText(saturation));
                 if (!foodTooltip.equals(Component.empty()))
-                    list.add(foodTooltip.copy().withStyle(ChatFormatting.DARK_GRAY));
+                    list.add(foodTooltip.copy().withStyle(s -> s.withColor(getColor(0x555555, ModConfig.foodValuesColor))));
             }
         }
 
         if (ModConfig.showCompostable) {
             float compostable = ComposterBlock.COMPOSTABLES.getOrDefault(stack.getItem(), 0);
             if (compostable != 0) {
-                Component compostableTooltip = Component.translatable("tooltipstxf.tooltip.compostable", formatText(compostable * 100)).append("%").withStyle(ChatFormatting.DARK_GRAY);
+                Component compostableTooltip = Component.translatable("tooltipstxf.tooltip.compostable", formatText(compostable * 100)).append("%").withStyle(s -> s.withColor(getColor(0x555555, ModConfig.compostableColor)));
                 list.add(compostableTooltip);
             }
         }
@@ -60,7 +60,7 @@ public class ModTooltips {
                     burnTimeTooltip = Component.translatable("tooltipstxf.tooltip.burn_time.seconds", formatText(burnTime / 20f));
                 else
                     burnTimeTooltip = Component.translatable("tooltipstxf.tooltip.burn_time", burnTime);
-                list.add(burnTimeTooltip.copy().withStyle(ChatFormatting.DARK_GRAY));
+                list.add(burnTimeTooltip.copy().withStyle(s -> s.withColor(getColor(0x555555, ModConfig.burnTimeColor))));
             }
         }
 
@@ -72,14 +72,14 @@ public class ModTooltips {
                     cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown.seconds", formatText((cooldown.endTime - cooldown.startTime) / 20f));
                 else
                     cooldownComponent = Component.translatable("tooltipstxf.tooltip.use_cooldown", cooldown.endTime - cooldown.startTime);
-                list.add(cooldownComponent.copy().withStyle(ChatFormatting.DARK_GRAY));
+                list.add(cooldownComponent.copy().withStyle(s -> s.withColor(getColor(0x555555, ModConfig.useCooldownColor))));
             }
         }
 
         if (ModConfig.showEnchantability) {
             int enchantable = stack.getItem().getEnchantmentValue();
             if (enchantable != 0) {
-                Component enchantabilityComponent = Component.translatable("tooltipstxf.tooltip.enchantability", enchantable).withStyle(ChatFormatting.DARK_GRAY);
+                Component enchantabilityComponent = Component.translatable("tooltipstxf.tooltip.enchantability", enchantable).withStyle(s -> s.withColor(getColor(0x555555, ModConfig.enchantabilityColor)));
                 list.add(enchantabilityComponent);
             }
         }
@@ -87,7 +87,7 @@ public class ModTooltips {
         if (ModConfig.showRepairCost) {
             int repairCost = stack.getBaseRepairCost();
             if (repairCost != 0)
-                list.add(Component.translatable("tooltipstxf.tooltip.repair_cost", repairCost + 1).withStyle(ChatFormatting.DARK_GRAY));
+                list.add(Component.translatable("tooltipstxf.tooltip.repair_cost", repairCost + 1).withStyle(s -> s.withColor(getColor(0x555555, ModConfig.repairCostColor))));
         }
 
         var block = Block.byItem(stack.getItem());
@@ -101,13 +101,13 @@ public class ModTooltips {
                 else if (block.getExplosionResistance() != 0)
                     strengthTooltip = Component.translatable("tooltipstxf.tooltip.resistance", formatText(block.getExplosionResistance()));
                 if (!strengthTooltip.equals(Component.empty()))
-                    list.add(strengthTooltip.copy().withStyle(ChatFormatting.DARK_GRAY));
+                    list.add(strengthTooltip.copy().withStyle(s -> s.withColor(getColor(0x555555, ModConfig.strengthColor))));
             }
 
             if (ModConfig.showEnchantmentPower && player != null) {
                 float enchantPower = getEnchantPowerBonus(player.level(), block);
                 if (enchantPower != 0) {
-                    Component enchantPowerTooltip = Component.translatable("tooltipstxf.tooltip.enchantment_power", formatText(enchantPower)).withStyle(ChatFormatting.DARK_GRAY);
+                    Component enchantPowerTooltip = Component.translatable("tooltipstxf.tooltip.enchantment_power", formatText(enchantPower)).withStyle(s -> s.withColor(getColor(0x555555, ModConfig.enchantmentPowerColor)));
                     list.add(enchantPowerTooltip);
                 }
             }
@@ -115,17 +115,27 @@ public class ModTooltips {
 
         if (ModConfig.showModName) {
             String modId = BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace();
-            Component modNameTooltip = Component.literal(ModList.get().getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId)).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
+            Component modNameTooltip = Component.literal(ModList.get().getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId)).withStyle(ChatFormatting.ITALIC).withStyle(s -> s.withColor(getColor(0x5555ff, ModConfig.modNameColor)));
             list.add(modNameTooltip);
         }
     }
 
-    public static String formatText(double value) {
+    private static String formatText(double value) {
         if (value % 1 == 0) return String.valueOf((int) value);
         else return String.format("%.2f", value).replaceAll("0*$", "").replaceAll("\\.$", "");
     }
 
     private static float getEnchantPowerBonus(Level level, Block block) {
         return block.defaultBlockState().getEnchantPowerBonus(level, BlockPos.ZERO);
+    }
+
+    private static Integer getColor(int defaultValue, String hexColor) {
+        int color = defaultValue;
+        try {
+            if (hexColor.startsWith("#")) hexColor = hexColor.substring(1);
+            color = Integer.parseInt(hexColor, 16);
+        } catch (Exception ignore) {
+        }
+        return color;
     }
 }
