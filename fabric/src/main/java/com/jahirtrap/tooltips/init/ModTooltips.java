@@ -28,7 +28,7 @@ public class ModTooltips {
 
         if (ModConfig.showFoodValues) {
             var foodProperties = stack.getItem().getFoodProperties();
-            if (stack.isEdible()) {
+            if (stack.isEdible() && foodProperties != null) {
                 Component foodTooltip = Component.empty();
                 int nutrition = foodProperties.getNutrition();
                 float saturation = nutrition * foodProperties.getSaturationModifier() * 2;
