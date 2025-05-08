@@ -1,2 +1,1 @@
-- Added tooltip color config options
-- Updated config lib
+- Fixed crash with food values tooltip ([Issue #2](https://github.com/jahirxtrap/tooltipstxf/issues/2)) 
