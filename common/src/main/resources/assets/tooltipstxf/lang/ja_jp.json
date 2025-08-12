@@ -1,0 +1,14 @@
+{
+  "tooltipstxf.tooltip.nutrition": "栄養価: %s",
+  "tooltipstxf.tooltip.saturation": "隠し満腹度: %s",
+  "tooltipstxf.tooltip.compostable": "堆肥化可否: %s",
+  "tooltipstxf.tooltip.burn_time": "燃焼時間: %s",
+  "tooltipstxf.tooltip.burn_time.seconds": "燃焼時間: %s秒",
+  "tooltipstxf.tooltip.use_cooldown": "クールダウン: %s",
+  "tooltipstxf.tooltip.use_cooldown.seconds": "クールダウン: %ss",
+  "tooltipstxf.tooltip.enchantability": "エンチャント値: %s",
+  "tooltipstxf.tooltip.repair_cost": "修理コスト: %s",
+  "tooltipstxf.tooltip.hardness": "硬度: %s",
+  "tooltipstxf.tooltip.resistance": "耐性: %s",
+  "tooltipstxf.tooltip.enchantment_power": "エンチャントパワー: %s"
+}
