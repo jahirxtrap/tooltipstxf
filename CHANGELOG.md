@@ -1,1 +1,2 @@
-- Update to 1.21.8
+- Added Japanese translations ([Pull request #3](https://github.com/jahirxtrap/tooltipstxf/pull/3))
+- Added Spanish translations
