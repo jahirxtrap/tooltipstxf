@@ -1,0 +1,14 @@
+{
+  "tooltipstxf.tooltip.nutrition": "Nutrición: %s",
+  "tooltipstxf.tooltip.saturation": "Saturación: %s",
+  "tooltipstxf.tooltip.compostable": "Compostable: %s",
+  "tooltipstxf.tooltip.burn_time": "Tiempo de combustión: %s",
+  "tooltipstxf.tooltip.burn_time.seconds": "Tiempo de combustión: %ss",
+  "tooltipstxf.tooltip.use_cooldown": "Enfriamiento: %s",
+  "tooltipstxf.tooltip.use_cooldown.seconds": "Enfriamiento: %ss",
+  "tooltipstxf.tooltip.enchantability": "Encantabilidad: %s",
+  "tooltipstxf.tooltip.repair_cost": "Costo de reparación: %s",
+  "tooltipstxf.tooltip.hardness": "Dureza: %s",
+  "tooltipstxf.tooltip.resistance": "Resistencia: %s",
+  "tooltipstxf.tooltip.enchantment_power": "Poder de encantamiento: %s"
+}
