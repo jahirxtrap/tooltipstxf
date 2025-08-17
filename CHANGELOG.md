@@ -1,1 +1,2 @@
-- Fixed crash with food values tooltip ([Issue #2](https://github.com/jahirxtrap/tooltipstxf/issues/2)) 
+- Added Japanese translations ([Pull request #3](https://github.com/jahirxtrap/tooltipstxf/pull/3))
+- Added Spanish translations
