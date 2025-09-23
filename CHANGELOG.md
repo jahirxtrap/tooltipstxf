@@ -1,2 +1,1 @@
-- Added Japanese translations ([Pull request #3](https://github.com/jahirxtrap/tooltipstxf/pull/3))
-- Added Spanish translations
+- Added Mining Level and Mining Speed tooltip ([Issue #4](https://github.com/jahirxtrap/tooltipstxf/issues/4))
