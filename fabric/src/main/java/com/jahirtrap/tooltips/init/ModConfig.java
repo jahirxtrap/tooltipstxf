@@ -25,6 +25,10 @@ public class ModConfig extends TXFConfig {
     public static boolean showStrength = false;
     @Entry(name = "Show Enchantment Power", itemDisplay = "minecraft:bookshelf")
     public static boolean showEnchantmentPower = true;
+    @Entry(name = "Show Mining Level", itemDisplay = "minecraft:iron_pickaxe")
+    public static boolean showMiningLevel = false;
+    @Entry(name = "Show Mining Speed", itemDisplay = "minecraft:iron_pickaxe")
+    public static boolean showMiningSpeed = false;
     @Entry(name = "Show Mod Name", itemDisplay = "minecraft:writable_book")
     public static boolean showModName = false;
     public static Comment colors;
@@ -46,6 +50,10 @@ public class ModConfig extends TXFConfig {
     public static String strengthColor = "#555555";
     @Entry(name = "Enchantment Power Color", width = 7, min = 7, isColor = true)
     public static String enchantmentPowerColor = "#555555";
+    @Entry(name = "Mining Level Color", width = 7, min = 7, isColor = true)
+    public static String miningLevelColor = "#555555";
+    @Entry(name = "Mining Speed Color", width = 7, min = 7, isColor = true)
+    public static String miningSpeedColor = "#555555";
     @Entry(name = "Mod Name Color", width = 7, min = 7, isColor = true)
     public static String modNameColor = "#5555ff";
 }

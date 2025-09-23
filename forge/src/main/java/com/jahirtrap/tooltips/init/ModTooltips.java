@@ -8,6 +8,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -112,6 +113,19 @@ public class ModTooltips {
                     Component enchantPowerTooltip = new TranslatableComponent("tooltipstxf.tooltip.enchantment_power", formatText(enchantPower)).withStyle(s -> s.withColor(getColor(0x555555, ModConfig.enchantmentPowerColor)));
                     list.add(enchantPowerTooltip);
                 }
+            }
+        }
+
+        if (stack.getItem() instanceof TieredItem tieredItem) {
+            var tier = tieredItem.getTier();
+            if (ModConfig.showMiningLevel) {
+                Component miningLevelTooltip = new TranslatableComponent("tooltipstxf.tooltip.mining_level", tier.getLevel()).withStyle(s -> s.withColor(getColor(0x555555, ModConfig.miningLevelColor)));
+                list.add(miningLevelTooltip);
+            }
+
+            if (ModConfig.showMiningSpeed) {
+                Component miningSpeedTooltip = new TranslatableComponent("tooltipstxf.tooltip.mining_speed", formatText(tier.getSpeed())).withStyle(s -> s.withColor(getColor(0x555555, ModConfig.miningSpeedColor)));
+                list.add(miningSpeedTooltip);
             }
         }
 
