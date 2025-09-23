@@ -4,11 +4,13 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -115,6 +117,25 @@ public class ModTooltips {
             }
         }
 
+        var tool = stack.get(DataComponents.TOOL);
+        if (tool != null) {
+            if (ModConfig.showMiningLevel && player != null) {
+                int miningLevel = getMiningLevel(tool, player.level());
+                if (miningLevel >= 0) {
+                    Component miningLevelTooltip = Component.translatable("tooltipstxf.tooltip.mining_level", miningLevel).withColor(getColor(0x555555, ModConfig.miningLevelColor));
+                    list.add(miningLevelTooltip);
+                }
+            }
+
+            if (ModConfig.showMiningSpeed) {
+                float miningSpeed = getMiningSpeed(tool);
+                if (miningSpeed >= 0) {
+                    Component miningSpeedTooltip = Component.translatable("tooltipstxf.tooltip.mining_speed", formatText(miningSpeed)).withColor(getColor(0x555555, ModConfig.miningSpeedColor));
+                    list.add(miningSpeedTooltip);
+                }
+            }
+        }
+
         if (ModConfig.showModName) {
             String modId = BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace();
             Component modNameTooltip = Component.literal(ModList.get().getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId)).withStyle(ChatFormatting.ITALIC).withColor(getColor(0x5555ff, ModConfig.modNameColor));
@@ -129,6 +150,27 @@ public class ModTooltips {
 
     private static float getEnchantPowerBonus(Level level, Block block) {
         return block.defaultBlockState().getEnchantPowerBonus(level, BlockPos.ZERO);
+    }
+
+    public static int getMiningLevel(Tool tool, Level level) {
+        if (level.registryAccess().lookupOrThrow(Registries.BLOCK).get(ModTags.Blocks.NEEDS_NETHERITE_TOOL).map(set -> set.stream().anyMatch(h -> tool.isCorrectForDrops(h.value().defaultBlockState()))).orElse(false)) {
+            return 4;
+        } else if (tool.isCorrectForDrops(Blocks.ANCIENT_DEBRIS.defaultBlockState())) {
+            return 3;
+        } else if (tool.isCorrectForDrops(Blocks.DIAMOND_ORE.defaultBlockState())) {
+            return 2;
+        } else if (tool.isCorrectForDrops(Blocks.IRON_ORE.defaultBlockState())) {
+            return 1;
+        } else if (tool.isCorrectForDrops(Blocks.STONE.defaultBlockState())) {
+            return 0;
+        } else return -1;
+    }
+
+    public static float getMiningSpeed(Tool tool) {
+        for (Tool.Rule rule : tool.rules()) {
+            if (rule.speed().isPresent()) return rule.speed().get();
+        }
+        return -1;
     }
 
     private static Integer getColor(int defaultValue, String hexColor) {
