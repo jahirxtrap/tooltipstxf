@@ -10,5 +10,7 @@
   "tooltipstxf.tooltip.repair_cost": "Costo de reparación: %s",
   "tooltipstxf.tooltip.hardness": "Dureza: %s",
   "tooltipstxf.tooltip.resistance": "Resistencia: %s",
-  "tooltipstxf.tooltip.enchantment_power": "Poder de encantamiento: %s"
+  "tooltipstxf.tooltip.enchantment_power": "Poder de encantamiento: %s",
+  "tooltipstxf.tooltip.mining_level": "Nivel de minería: %s",
+  "tooltipstxf.tooltip.mining_speed": "Velocidad de minería: %s"
 }
