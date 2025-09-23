@@ -14,8 +14,10 @@ Additional info on tooltips such as durability, food & more
 - Repair Cost Tooltip => Displays the repair cost of an item when repaired on anvils
 - Strength Tooltip => Displays the hardness (destroy time) and explosion resistance of blocks
 - Enchantment Power Tooltip => Displays the enchantment power bonus a block provides to the enchanting table
+- Mining Level Tooltip => Displays the mining level of a tool
+- Mining Speed Tooltip => Displays the mining speed of a tool
 - Mod Name Tooltip => Displays the name of the mod the item belongs to
-- Tooltips display and other features can be configured in mod config
+- Tooltips display, colors and other features can be configured in mod config
 
 <strong>Fabric/Quilt dependencies:</strong>
 
