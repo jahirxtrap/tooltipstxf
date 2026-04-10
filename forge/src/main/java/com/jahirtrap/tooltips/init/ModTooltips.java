@@ -135,7 +135,7 @@ public class ModTooltips {
 
         if (ModConfig.showModName) {
             String modId = BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace();
-            Component modNameTooltip = Component.literal(ModList.get().getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId)).withStyle(ChatFormatting.ITALIC).withColor(getColor(0x5555ff, ModConfig.modNameColor));
+            Component modNameTooltip = Component.literal(ModList.getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId)).withStyle(ChatFormatting.ITALIC).withColor(getColor(0x5555ff, ModConfig.modNameColor));
             list.add(modNameTooltip);
         }
     }
