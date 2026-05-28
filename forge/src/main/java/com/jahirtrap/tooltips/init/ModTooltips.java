@@ -1,11 +1,15 @@
 package com.jahirtrap.tooltips.init;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -77,6 +81,13 @@ public class ModTooltips {
             }
         }
 
+        if (ModConfig.showSongDuration) {
+            if (stack.getItem() instanceof RecordItem record) {
+                Component songDurationTooltip = Component.translatable("tooltipstxf.tooltip.song_duration", formatText(record.getLengthInTicks() / 20f));
+                list.add(songDurationTooltip.copy().withStyle(s -> s.withColor(getColor(0x555555, ModConfig.songDurationColor))));
+            }
+        }
+
         if (ModConfig.showEnchantability) {
             int enchantable = stack.getItem().getEnchantmentValue();
             if (enchantable != 0) {
@@ -132,6 +143,21 @@ public class ModTooltips {
             Component modNameTooltip = Component.literal(ModList.get().getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId)).withStyle(ChatFormatting.ITALIC).withStyle(s -> s.withColor(getColor(0x5555ff, ModConfig.modNameColor)));
             list.add(modNameTooltip);
         }
+
+        if (ModConfig.showComponents) {
+            if (Screen.hasControlDown()) {
+                list.add(Component.translatable("tooltipstxf.tooltip.components").withStyle(s -> s.withColor(getColor(0x555555, ModConfig.componentsColors, 0))));
+                CompoundTag tag = stack.getTag();
+                if (tag != null) {
+                    for (String key : tag.getAllKeys().stream().sorted().toList()) {
+                        Tag value = tag.get(key);
+                        list.add(Component.literal("  ").append(Component.literal(key + ": ").withStyle(s -> s.withColor(getColor(0xAAAAAA, ModConfig.componentsColors, 2)))).append(Component.literal(value != null ? value.toString() : "").withStyle(s -> s.withColor(getColor(0x555555, ModConfig.componentsColors, 3)))));
+                    }
+                }
+            } else {
+                list.add(Component.translatable("tooltipstxf.tooltip.components").withStyle(s -> s.withColor(getColor(0x555555, ModConfig.componentsColors, 0))).append(Component.literal(" ")).append(Component.literal("CTRL").withStyle(s -> s.withColor(getColor(0x55FFFF, ModConfig.componentsColors, 1)))));
+            }
+        }
     }
 
     private static String formatText(double value) {
@@ -141,6 +167,10 @@ public class ModTooltips {
 
     private static float getEnchantPowerBonus(Level level, Block block) {
         return block.defaultBlockState().getEnchantPowerBonus(level, BlockPos.ZERO);
+    }
+
+    private static Integer getColor(int defaultValue, List<String> colors, int index) {
+        return getColor(defaultValue, index >= 0 && index < colors.size() ? colors.get(index) : "");
     }
 
     private static Integer getColor(int defaultValue, String hexColor) {

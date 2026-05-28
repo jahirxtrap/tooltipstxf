@@ -2,6 +2,8 @@ package com.jahirtrap.tooltips.init;
 
 import com.jahirtrap.configlib.TXFConfig;
 
+import java.util.List;
+
 public class ModConfig extends TXFConfig {
     public static final String GENERAL = "general", COLORS = "colors";
 
@@ -19,6 +21,8 @@ public class ModConfig extends TXFConfig {
     public static boolean showBurnTime = true;
     @Entry(category = GENERAL, name = "Show Use Cooldown", itemDisplay = "minecraft:clock")
     public static boolean showUseCooldown = false;
+    @Entry(category = GENERAL, name = "Show Song Duration", itemDisplay = "minecraft:music_disc_cat")
+    public static boolean showSongDuration = true;
     @Entry(category = GENERAL, name = "Show Enchantability", itemDisplay = "minecraft:enchanting_table")
     public static boolean showEnchantability = false;
     @Entry(category = GENERAL, name = "Show Repair Cost", itemDisplay = "minecraft:anvil")
@@ -33,6 +37,8 @@ public class ModConfig extends TXFConfig {
     public static boolean showMiningSpeed = false;
     @Entry(category = GENERAL, name = "Show Mod Name", itemDisplay = "minecraft:writable_book")
     public static boolean showModName = false;
+    @Entry(category = GENERAL, name = "Show Components", itemDisplay = "minecraft:knowledge_book")
+    public static boolean showComponents = false;
 
     @Entry(category = COLORS, name = "Durability Color", width = 7, min = 7, isColor = true)
     public static String durabilityColor = "#555555";
@@ -44,6 +50,8 @@ public class ModConfig extends TXFConfig {
     public static String burnTimeColor = "#555555";
     @Entry(category = COLORS, name = "Use Cooldown Color", width = 7, min = 7, isColor = true)
     public static String useCooldownColor = "#555555";
+    @Entry(category = COLORS, name = "Song Duration Color", width = 7, min = 7, isColor = true)
+    public static String songDurationColor = "#555555";
     @Entry(category = COLORS, name = "Enchantability Color", width = 7, min = 7, isColor = true)
     public static String enchantabilityColor = "#555555";
     @Entry(category = COLORS, name = "Repair Cost Color", width = 7, min = 7, isColor = true)
@@ -58,4 +66,6 @@ public class ModConfig extends TXFConfig {
     public static String miningSpeedColor = "#555555";
     @Entry(category = COLORS, name = "Mod Name Color", width = 7, min = 7, isColor = true)
     public static String modNameColor = "#5555ff";
+    @Entry(category = COLORS, name = "Components Colors", width = 7, min = 7, isColor = true, labels = {"Title", "Ctrl", "Key", "Value"})
+    public static List<String> componentsColors = List.of("#555555", "#55FFFF", "#AAAAAA", "#555555");
 }
