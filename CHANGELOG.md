@@ -1,1 +1,2 @@
-- Update to 1.21.11
+- Added Song Duration tooltip for music discs
+- Added Components tooltip (hold CTRL to expand)
