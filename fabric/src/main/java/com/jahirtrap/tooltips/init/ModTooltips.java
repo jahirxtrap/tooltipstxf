@@ -82,8 +82,9 @@ public class ModTooltips {
         }
 
         if (ModConfig.showSongDuration) {
-            if (stack.getItem() instanceof RecordItem record) {
-                Component songDurationTooltip = Component.translatable("tooltipstxf.tooltip.song_duration", formatText(record.getLengthInTicks() / 20f));
+            float songDuration = getSongLengthInSeconds(stack);
+            if (songDuration >= 0) {
+                Component songDurationTooltip = Component.translatable("tooltipstxf.tooltip.song_duration", formatText(songDuration));
                 list.add(songDurationTooltip.copy().withStyle(s -> s.withColor(getColor(0x555555, ModConfig.songDurationColor))));
             }
         }
@@ -145,17 +146,17 @@ public class ModTooltips {
         }
 
         if (ModConfig.showComponents) {
-            if (Screen.hasControlDown()) {
-                list.add(Component.translatable("tooltipstxf.tooltip.components").withStyle(s -> s.withColor(getColor(0x555555, ModConfig.componentsColors, 0))));
-                CompoundTag tag = stack.getTag();
-                if (tag != null) {
+            CompoundTag tag = stack.getTag();
+            if (tag != null && !tag.getAllKeys().isEmpty()) {
+                if (Screen.hasControlDown()) {
+                    list.add(Component.translatable("tooltipstxf.tooltip.components").withStyle(s -> s.withColor(getColor(0x555555, ModConfig.componentsColors, 0))));
                     for (String key : tag.getAllKeys().stream().sorted().toList()) {
                         Tag value = tag.get(key);
                         list.add(Component.literal("  ").append(Component.literal(key + ": ").withStyle(s -> s.withColor(getColor(0xAAAAAA, ModConfig.componentsColors, 2)))).append(Component.literal(value != null ? value.toString() : "").withStyle(s -> s.withColor(getColor(0x555555, ModConfig.componentsColors, 3)))));
                     }
+                } else {
+                    list.add(Component.translatable("tooltipstxf.tooltip.components").withStyle(s -> s.withColor(getColor(0x555555, ModConfig.componentsColors, 0))).append(Component.literal(" ")).append(Component.literal("CTRL").withStyle(s -> s.withColor(getColor(0x55FFFF, ModConfig.componentsColors, 1)))));
                 }
-            } else {
-                list.add(Component.translatable("tooltipstxf.tooltip.components").withStyle(s -> s.withColor(getColor(0x555555, ModConfig.componentsColors, 0))).append(Component.literal(" ")).append(Component.literal("CTRL").withStyle(s -> s.withColor(getColor(0x55FFFF, ModConfig.componentsColors, 1)))));
             }
         }
     }
@@ -167,6 +168,11 @@ public class ModTooltips {
 
     private static float getEnchantPowerBonus(Level level, Block block) {
         return block.defaultBlockState().is(BlockTags.ENCHANTMENT_POWER_PROVIDER) ? 1 : 0;
+    }
+
+    private static float getSongLengthInSeconds(ItemStack stack) {
+        if (stack.getItem() instanceof RecordItem record) return record.getLengthInTicks() / 20f;
+        return -1;
     }
 
     private static Integer getColor(int defaultValue, List<String> colors, int index) {
