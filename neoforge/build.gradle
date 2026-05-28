@@ -41,8 +41,7 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 dependencies {
     compileOnly project(":common")
 
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    jarJar "com.jahirtrap:configlibtxf:${configlibtxf_version}-neoforge"
+    implementation(jarJar("io.github.jahirxtrap:configlibtxf:${configlibtxf_version}-neoforge"))
 }
 
 def resourceTargets = ['META-INF/neoforge.mods.toml', 'pack.mcmeta']

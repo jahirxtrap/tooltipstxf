@@ -1,11 +1,17 @@
 package com.jahirtrap.tooltips.init;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -80,6 +86,17 @@ public class ModTooltips {
             }
         }
 
+        if (ModConfig.showSongDuration) {
+            var jukebox = stack.get(DataComponents.JUKEBOX_PLAYABLE);
+            var registries = context.registries();
+            if (jukebox != null && registries != null) {
+                jukebox.song().unwrap(registries).ifPresent(holder -> {
+                    Component songDurationTooltip = Component.translatable("tooltipstxf.tooltip.song_duration", formatText(holder.value().lengthInSeconds()));
+                    list.add(songDurationTooltip.copy().withColor(getColor(0x555555, ModConfig.songDurationColor)));
+                });
+            }
+        }
+
         if (ModConfig.showEnchantability) {
             var enchantable = stack.get(DataComponents.ENCHANTABLE);
             if (enchantable != null && enchantable.value() != 0) {
@@ -141,6 +158,34 @@ public class ModTooltips {
             Component modNameTooltip = Component.literal(ModList.get().getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId)).withStyle(ChatFormatting.ITALIC).withColor(getColor(0x5555ff, ModConfig.modNameColor));
             list.add(modNameTooltip);
         }
+
+        if (ModConfig.showComponents) {
+            if (hasControlDown()) {
+                list.add(Component.translatable("tooltipstxf.tooltip.components").withColor(getColor(0x555555, ModConfig.componentsColors, 0)));
+                var registries = context.registries();
+                RegistryOps<Tag> ops = registries != null ? registries.createSerializationContext(NbtOps.INSTANCE) : null;
+                for (TypedDataComponent<?> component : stack.getComponents()) {
+                    var key = BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component.type());
+                    String id = key != null ? key.toString() : component.type().toString();
+                    list.add(Component.literal("  ").append(Component.literal(id + ": ").withColor(getColor(0xAAAAAA, ModConfig.componentsColors, 2))).append(Component.literal(componentValue(component, ops)).withColor(getColor(0x555555, ModConfig.componentsColors, 3))));
+                }
+            } else {
+                list.add(Component.translatable("tooltipstxf.tooltip.components").withColor(getColor(0x555555, ModConfig.componentsColors, 0)).append(Component.literal(" ")).append(Component.literal("CTRL").withColor(getColor(0x55FFFF, ModConfig.componentsColors, 1))));
+            }
+        }
+    }
+
+    private static boolean hasControlDown() {
+        var window = Minecraft.getInstance().getWindow();
+        return InputConstants.isKeyDown(window, InputConstants.KEY_LCONTROL) || InputConstants.isKeyDown(window, InputConstants.KEY_RCONTROL);
+    }
+
+    private static String componentValue(TypedDataComponent<?> component, RegistryOps<Tag> ops) {
+        if (ops != null) {
+            var result = component.encodeValue(ops).result();
+            if (result.isPresent()) return result.get().toString();
+        }
+        return String.valueOf(component.value());
     }
 
     private static String formatText(double value) {
@@ -171,6 +216,10 @@ public class ModTooltips {
             if (rule.speed().isPresent()) return rule.speed().get();
         }
         return -1;
+    }
+
+    private static Integer getColor(int defaultValue, List<String> colors, int index) {
+        return getColor(defaultValue, index >= 0 && index < colors.size() ? colors.get(index) : "");
     }
 
     private static Integer getColor(int defaultValue, String hexColor) {
