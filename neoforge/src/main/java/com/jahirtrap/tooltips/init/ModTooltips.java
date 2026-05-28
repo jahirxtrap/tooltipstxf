@@ -157,7 +157,7 @@ public class ModTooltips {
             list.add(modNameTooltip);
         }
 
-        if (ModConfig.showComponents) {
+        if (ModConfig.showComponents && !stack.getComponents().isEmpty()) {
             if (hasControlDown()) {
                 list.add(Component.translatable("tooltipstxf.tooltip.components").withColor(getColor(0x555555, ModConfig.componentsColors, 0)));
                 var registries = context.registries();

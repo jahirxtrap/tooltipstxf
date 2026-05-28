@@ -1,1 +1,2 @@
-- Updated config lib
+- Added Song Duration tooltip for music discs
+- Added Components tooltip (hold CTRL to expand)
