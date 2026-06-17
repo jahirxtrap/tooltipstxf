@@ -1,2 +1,1 @@
-- Added Song Duration tooltip for music discs
-- Added Components tooltip (hold CTRL to expand)
+- Update to 26.2
