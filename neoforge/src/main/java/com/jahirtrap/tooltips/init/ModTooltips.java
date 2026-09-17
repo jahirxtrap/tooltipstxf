@@ -1,8 +1,8 @@
 package com.jahirtrap.tooltips.init;
 
+import com.jahirtrap.tooltips.util.ResolvableIntReader;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.TypedDataComponent;
@@ -16,11 +16,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.Compostable;
+import net.minecraft.world.item.component.CookingFuel;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ComposterBlock;
 import net.neoforged.fml.ModList;
 
 import java.util.List;
@@ -52,25 +53,24 @@ public class ModTooltips {
         }
 
         if (ModConfig.showCompostable) {
-            float compostable = ComposterBlock.getValue(stack);
-            if (compostable > -1 && compostable != 0) {
-                Component compostableTooltip = Component.translatable("tooltipstxf.tooltip.compostable", formatText(compostable * 100)).append("%").withColor(getColor(0x555555, ModConfig.compostableColor));
+            Compostable compostable = stack.get(DataComponents.COMPOSTABLE);
+            int compostChance = compostable != null ? ResolvableIntReader.compostChance(compostable.layers()) : 0;
+            if (compostChance != 0) {
+                Component compostableTooltip = Component.translatable("tooltipstxf.tooltip.compostable", formatText(compostChance)).append("%").withColor(getColor(0x555555, ModConfig.compostableColor));
                 list.add(compostableTooltip);
             }
         }
 
-        if (ModConfig.showBurnTime && player != null) {
-            try {
-                int burnTime = stack.getBurnTime(null, player.level().fuelValues());
-                if (burnTime > -1 && burnTime != 0) {
-                    Component burnTimeTooltip;
-                    if (ModConfig.timeInSeconds)
-                        burnTimeTooltip = Component.translatable("tooltipstxf.tooltip.burn_time.seconds", formatText(burnTime / 20f));
-                    else
-                        burnTimeTooltip = Component.translatable("tooltipstxf.tooltip.burn_time", burnTime);
-                    list.add(burnTimeTooltip.copy().withColor(getColor(0x555555, ModConfig.burnTimeColor)));
-                }
-            } catch (Exception ignored) {
+        if (ModConfig.showBurnTime) {
+            CookingFuel fuel = stack.get(DataComponents.COOKING_FUEL);
+            int burnTime = fuel != null ? ResolvableIntReader.burnTime(fuel.burnTime()) : 0;
+            if (burnTime != 0) {
+                Component burnTimeTooltip;
+                if (ModConfig.timeInSeconds)
+                    burnTimeTooltip = Component.translatable("tooltipstxf.tooltip.burn_time.seconds", formatText(burnTime / 20f));
+                else
+                    burnTimeTooltip = Component.translatable("tooltipstxf.tooltip.burn_time", burnTime);
+                list.add(burnTimeTooltip.copy().withColor(getColor(0x555555, ModConfig.burnTimeColor)));
             }
         }
 
@@ -174,8 +174,7 @@ public class ModTooltips {
     }
 
     private static boolean hasControlDown() {
-        var window = Minecraft.getInstance().getWindow();
-        return InputConstants.isKeyDown(window, InputConstants.KEY_LCONTROL) || InputConstants.isKeyDown(window, InputConstants.KEY_RCONTROL);
+        return InputConstants.isKeyDown(InputConstants.KEY_LCONTROL) || InputConstants.isKeyDown(InputConstants.KEY_RCONTROL);
     }
 
     private static String componentValue(TypedDataComponent<?> component, RegistryOps<Tag> ops) {
